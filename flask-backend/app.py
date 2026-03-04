@@ -1,28 +1,16 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import pickle, os, logging
+import pickle
+import os
+import logging
 import pandas as pd
 import numpy as np
-
-# ----------------------------
-# Numpy-safe JSON encoder
-# ----------------------------
-class NumpyEncoder(JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, np.integer):
-            return int(obj)
-        if isinstance(obj, np.floating):
-            return float(obj)
-        if isinstance(obj, np.ndarray):
-            return obj.tolist()
-        return super(NumpyEncoder, self).default(obj)
 
 # ----------------------------
 # App initialization
 # ----------------------------
 app = Flask(__name__)
 CORS(app)
-app.json_encoder = NumpyEncoder
 
 # ----------------------------
 # Logging setup
@@ -148,6 +136,7 @@ def predict():
         prob_dict = {str(cls): float(prob) for cls, prob in zip(model.classes_, probabilities)}
         confidence = float(max(probabilities))
 
+        # Convert numpy types to native Python types
         result = {
             "prediction": prediction_label,
             "prediction_code": int(prediction),
