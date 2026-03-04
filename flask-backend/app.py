@@ -3,7 +3,6 @@ from flask_cors import CORS
 import pickle, os, logging
 import pandas as pd
 import numpy as np
-from flask.json import JSONEncoder
 
 # ----------------------------
 # Numpy-safe JSON encoder
